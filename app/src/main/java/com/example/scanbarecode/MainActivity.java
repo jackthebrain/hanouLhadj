@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,22 +27,10 @@ public class MainActivity extends AppCompatActivity {
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScanCode();
+                Intent intent= new Intent(MainActivity.this,AddItem.class);
+                startActivity(intent);
+
             }
         });
     }
-    private void ScanCode (){
-        ScanOptions options = new ScanOptions();
-        options.setPrompt("volume up to flash on");
-        options.setBeepEnabled(true);
-        options.setOrientationLocked(true);
-        options.setCaptureActivity(Capture.class);
-        barLauncher.launch(options);
-
-    }
-    ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(),result ->{
-        if (result.getContents() != null) {
-            Toast.makeText(this, "the code is " + result.getContents(), Toast.LENGTH_SHORT).show();
-        }
-    });
 }
