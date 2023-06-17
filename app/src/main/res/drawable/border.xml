@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+        <solid android:color="#6200EE" tools:ignore="StateListReachable" />
+        <stroke android:width="3dp"
+            android:color="#000000" tools:ignore="StateListReachable" /> <!-- Set the desired border color here -->
+        <corners android:radius="10dp" /> <!-- Set the desired corner radius here -->
+</selector>
