@@ -14,8 +14,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
@@ -27,6 +30,7 @@ public class ProductsList extends AppCompatActivity {
     ArrayList<Integer> quantity, buyingPrice, sellingPrice;
     ArrayList<Long> barcode;
     AdapterItem customAdapter;
+    private Long barcodeToSearch;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -36,7 +40,6 @@ public class ProductsList extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
 
-
         myDB = new dataBase(ProductsList.this);
         name = new ArrayList<>();
         seller = new ArrayList<>();
@@ -45,32 +48,43 @@ public class ProductsList extends AppCompatActivity {
         buyingPrice = new ArrayList<>();
         sellingPrice = new ArrayList<>();
         barcode = new ArrayList<>();
+        startBarcodeScanning();
 
-
-        storeDataInArrays();
-
-        customAdapter = new AdapterItem( ProductsList.this,  this,  barcode,  name,  seller,
-                 date,  quantity,  buyingPrice,  sellingPrice);
+        customAdapter = new AdapterItem(ProductsList.this, this, barcode, name, seller, date, quantity, buyingPrice, sellingPrice);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(ProductsList.this));
 
     }
 
+    private void startBarcodeScanning() {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setPrompt("Scan a barcode");  // Optional: Set a prompt message
+        integrator.setOrientationLocked(false);
+        integrator.setCaptureActivity(Capture.class);// Optional: Lock the orientation
+        integrator.initiateScan();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            storeDataInArrays();
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null && result.getContents() != null) {
+            String scannedBarcode = result.getContents();
+            barcodeToSearch = Long.parseLong(scannedBarcode);
+            storeDataInArrays(barcodeToSearch);
             customAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(this, "Scan failed", Toast.LENGTH_SHORT).show();
         }
     }
 
-    void storeDataInArrays(){
-        Cursor cursor = myDB.readAllData();
-        if(cursor.getCount() == 0){
-        }else{
-            while (cursor.moveToNext()){
-                barcode.add(cursor.getLong(0));
+    void storeDataInArrays(Long barcode) {
+        Cursor cursor = myDB.readData(barcode);
+        if (cursor.getCount() == 0) {
+            // Handle when no data found
+        } else {
+            while (cursor.moveToNext()) {
+                this.barcode.add(cursor.getLong(0));
                 name.add(cursor.getString(1));
                 seller.add(cursor.getString(2));
                 date.add(cursor.getString(3));
@@ -80,6 +94,4 @@ public class ProductsList extends AppCompatActivity {
             }
         }
     }
-
-
 }
