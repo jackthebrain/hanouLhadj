@@ -11,9 +11,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,6 +34,8 @@ public class ProductsList extends AppCompatActivity {
     ArrayList<Integer> quantity, buyingPrice, sellingPrice;
     ArrayList<Long> barcode;
     AdapterItem customAdapter;
+    Button ScanBare;
+    EditText SearchItem;
     private Long barcodeToSearch;
 
     @SuppressLint("MissingInflatedId")
@@ -48,11 +54,49 @@ public class ProductsList extends AppCompatActivity {
         buyingPrice = new ArrayList<>();
         sellingPrice = new ArrayList<>();
         barcode = new ArrayList<>();
-        startBarcodeScanning();
+        ScanBare= findViewById(R.id.ScanBare);
+        SearchItem= findViewById(R.id.SearchItem);
 
-        customAdapter = new AdapterItem(ProductsList.this, this, barcode, name, seller, date, quantity, buyingPrice, sellingPrice);
+
+
+        ScanBare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startBarcodeScanning();
+            }
+        });
+
+        SearchItem.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Not needed for this implementation
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                barcode.clear();
+                name.clear();
+                seller.clear();
+                date.clear();
+                quantity.clear();
+                buyingPrice.clear();
+                sellingPrice.clear();
+
+                String searchText = charSequence.toString().trim();
+                storeDataItem(searchText);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // Not needed for this implementation
+            }
+        });
+
+
+    customAdapter = new AdapterItem(ProductsList.this, this, barcode, name, seller, date, quantity, buyingPrice, sellingPrice);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(ProductsList.this));
+        storeDataItem("");
 
     }
 
@@ -81,8 +125,26 @@ public class ProductsList extends AppCompatActivity {
     void storeDataInArrays(Long barcode) {
         Cursor cursor = myDB.readData(barcode);
         if (cursor.getCount() == 0) {
-            // Handle when no data found
+            Toast.makeText(this, "non trouver", Toast.LENGTH_SHORT).show();
         } else {
+            while (cursor.moveToNext()) {
+                this.barcode.add(cursor.getLong(0));
+                name.add(cursor.getString(1));
+                seller.add(cursor.getString(2));
+                date.add(cursor.getString(3));
+                quantity.add(cursor.getInt(6));
+                buyingPrice.add(cursor.getInt(4));
+                sellingPrice.add(cursor.getInt(5));
+            }
+        }
+    }
+    void storeDataItem(String item) {
+
+        Cursor cursor = myDB.readDataItem(item);
+        if (cursor.getCount() == 0) {
+            Toast.makeText(this, "Item not found", Toast.LENGTH_SHORT).show();
+        } else {
+
             while (cursor.moveToNext()) {
                 this.barcode.add(cursor.getLong(0));
                 name.add(cursor.getString(1));

@@ -23,7 +23,6 @@ public class AddItem extends AppCompatActivity {
     private EditText ItemName, ItemSeller, BuyingPrice, SellingPrice, Quantity;
     private TextView BareCode;
     private Button addItem, scanCode;
-    private String codeBare;
     private long bareCode;
 
     @SuppressLint("MissingInflatedId")
