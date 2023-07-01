@@ -116,19 +116,20 @@ class dataBase extends SQLiteOpenHelper {
             Toast.makeText(context, "Updated Successfully!", Toast.LENGTH_SHORT).show();
         }
 
-    }
+    }*/
 
-    void deleteOneRow(String row_id){
+    void deleteOneRow(long barcode) {
         SQLiteDatabase db = this.getWritableDatabase();
-        long result = db.delete(TABLE_NAME, "_id=?", new String[]{row_id});
-        if(result == -1){
+        long result = db.delete(TABLE_NAME, COLUMN_BARCODE + "=?", new String[]{String.valueOf(barcode)});
+        if (result == -1) {
             Toast.makeText(context, "Failed to Delete.", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             Toast.makeText(context, "Successfully Deleted.", Toast.LENGTH_SHORT).show();
         }
+        db.close();
     }
 
-    void deleteAllData(){
+   /* void deleteAllData(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_NAME);
     }*/

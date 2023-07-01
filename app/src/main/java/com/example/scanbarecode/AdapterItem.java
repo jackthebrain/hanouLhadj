@@ -3,13 +3,10 @@ package com.example.scanbarecode;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -66,6 +63,14 @@ public class AdapterItem extends RecyclerView.Adapter<AdapterItem.MyViewHolder> 
                     Long barcode = (Long) AdapterItem.this.barcode.get(position);
                     itemClickListener.onItemClick(barcode);
                 }
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Long barcode = (Long) AdapterItem.this.barcode.get(position);
+                itemClickListener.onItemClick(barcode);
+                return false;
             }
         });
     }
