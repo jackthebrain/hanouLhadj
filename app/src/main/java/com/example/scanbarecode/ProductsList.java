@@ -94,6 +94,15 @@ public class ProductsList extends AppCompatActivity {
 
 
     customAdapter = new AdapterItem(ProductsList.this, this, barcode, name, seller, date, quantity, buyingPrice, sellingPrice);
+        customAdapter.setItemClickListener(new AdapterItem.ItemClickListener() {
+            @Override
+            public void onItemClick(Long barcode) {
+
+                Intent intent = new Intent(ProductsList.this, itemDetails.class);
+                intent.putExtra("barecode", String.valueOf(barcode)); // Convert Long to String
+                startActivity(intent);
+            }
+        });
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(ProductsList.this));
         storeDataItem("");
@@ -114,30 +123,15 @@ public class ProductsList extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null && result.getContents() != null) {
             String scannedBarcode = result.getContents();
-            barcodeToSearch = Long.parseLong(scannedBarcode);
-            storeDataInArrays(barcodeToSearch);
-            customAdapter.notifyDataSetChanged();
+            Long barcodeToSearch = Long.parseLong(scannedBarcode);
+            Intent intent = new Intent(ProductsList.this, itemDetails.class);
+            intent.putExtra("barecode", String.valueOf(barcodeToSearch)); // Convert Long to String
+            startActivity(intent);
         } else {
             Toast.makeText(this, "Scan failed", Toast.LENGTH_SHORT).show();
         }
     }
 
-    void storeDataInArrays(Long barcode) {
-        Cursor cursor = myDB.readData(barcode);
-        if (cursor.getCount() == 0) {
-            Toast.makeText(this, "non trouver", Toast.LENGTH_SHORT).show();
-        } else {
-            while (cursor.moveToNext()) {
-                this.barcode.add(cursor.getLong(0));
-                name.add(cursor.getString(1));
-                seller.add(cursor.getString(2));
-                date.add(cursor.getString(3));
-                quantity.add(cursor.getInt(6));
-                buyingPrice.add(cursor.getInt(4));
-                sellingPrice.add(cursor.getInt(5));
-            }
-        }
-    }
     void storeDataItem(String item) {
 
         Cursor cursor = myDB.readDataItem(item);

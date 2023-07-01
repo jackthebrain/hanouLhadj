@@ -23,10 +23,11 @@ public class AdapterItem extends RecyclerView.Adapter<AdapterItem.MyViewHolder> 
 
     private Context context;
     private Activity activity;
-    private ArrayList barcode, name, seller, quantity,date,buyingPrice,sellingPrice;
+    private ArrayList barcode, name, seller, quantity, date, buyingPrice, sellingPrice;
+    private ItemClickListener itemClickListener;
 
     AdapterItem(Activity activity, Context context, ArrayList barcode, ArrayList name, ArrayList seller,
-                ArrayList date, ArrayList quantity, ArrayList buyingPrice, ArrayList sellingPrice){
+                ArrayList date, ArrayList quantity, ArrayList buyingPrice, ArrayList sellingPrice) {
         this.activity = activity;
         this.context = context;
         this.barcode = barcode;
@@ -36,6 +37,10 @@ public class AdapterItem extends RecyclerView.Adapter<AdapterItem.MyViewHolder> 
         this.quantity = quantity;
         this.buyingPrice = buyingPrice;
         this.sellingPrice = sellingPrice;
+    }
+
+    public void setItemClickListener(ItemClickListener listener) {
+        this.itemClickListener = listener;
     }
 
     @NonNull
@@ -50,8 +55,19 @@ public class AdapterItem extends RecyclerView.Adapter<AdapterItem.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         holder.itemNameView.setText(String.valueOf(name.get(position)));
-        holder.SellingPriceView.setText(String.valueOf(sellingPrice.get(position)));
-        holder.QuantityView.setText(String.valueOf(quantity.get(position)));
+        holder.sellingPriceView.setText(String.valueOf(sellingPrice.get(position)));
+        holder.quantityView.setText(String.valueOf(quantity.get(position)));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemClickListener != null) {
+                    // Get the barcode of the clicked item
+                    Long barcode = (Long) AdapterItem.this.barcode.get(position);
+                    itemClickListener.onItemClick(barcode);
+                }
+            }
+        });
     }
 
     @Override
@@ -61,16 +77,20 @@ public class AdapterItem extends RecyclerView.Adapter<AdapterItem.MyViewHolder> 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView itemNameView, SellingPriceView, QuantityView;
+        TextView itemNameView, sellingPriceView, quantityView;
         LinearLayout mainLayout;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemNameView= itemView.findViewById(R.id.ItemNameView);
-            SellingPriceView = itemView.findViewById(R.id.SellingPriceView);
-            QuantityView = itemView.findViewById(R.id.QuantityView);
+            itemNameView = itemView.findViewById(R.id.ItemNameView);
+            sellingPriceView = itemView.findViewById(R.id.SellingPriceView);
+            quantityView = itemView.findViewById(R.id.QuantityView);
+
         }
 
     }
 
+    public interface ItemClickListener {
+        void onItemClick(Long barcode);
+    }
 }
