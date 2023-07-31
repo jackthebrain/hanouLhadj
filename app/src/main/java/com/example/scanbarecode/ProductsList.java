@@ -1,41 +1,36 @@
 package com.example.scanbarecode;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProductsList extends AppCompatActivity {
 
     RecyclerView recyclerView;
     dataBase myDB;
-    ArrayList<String> name, seller, date;
-    ArrayList<Integer> quantity, buyingPrice, sellingPrice;
-    ArrayList<Long> barcode;
     AdapterItem customAdapter;
     Button ScanBare;
-    EditText SearchItem;
+    EditText searchItem;
     private Long barcodeToSearch;
 
     @SuppressLint("MissingInflatedId")
@@ -47,17 +42,27 @@ public class ProductsList extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
 
         myDB = new dataBase(ProductsList.this);
-        name = new ArrayList<>();
-        seller = new ArrayList<>();
-        date = new ArrayList<>();
-        quantity = new ArrayList<>();
-        buyingPrice = new ArrayList<>();
-        sellingPrice = new ArrayList<>();
-        barcode = new ArrayList<>();
-        ScanBare= findViewById(R.id.ScanBare);
-        SearchItem= findViewById(R.id.SearchItem);
+        ScanBare = findViewById(R.id.ScanBare);
+        searchItem = findViewById(R.id.serachText);
+        searchItem.clearFocus();
 
+        searchItem.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // No implementation needed
+            }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Filter the list based on the entered text
+                listFiltered(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // No implementation needed
+            }
+        });
 
         ScanBare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,54 +71,48 @@ public class ProductsList extends AppCompatActivity {
             }
         });
 
-        SearchItem.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // Not needed for this implementation
-            }
+        List<item> itemList = myDB.readAllData();
+        customAdapter = new AdapterItem(ProductsList.this, this, itemList);
+        recyclerView.setAdapter(customAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(ProductsList.this));
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                barcode.clear();
-                name.clear();
-                seller.clear();
-                date.clear();
-                quantity.clear();
-                buyingPrice.clear();
-                sellingPrice.clear();
-
-                String searchText = charSequence.toString().trim();
-                storeDataItem(searchText);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                // Not needed for this implementation
-            }
-        });
-
-
-    customAdapter = new AdapterItem(ProductsList.this, this, barcode, name, seller, date, quantity, buyingPrice, sellingPrice);
         customAdapter.setItemClickListener(new AdapterItem.ItemClickListener() {
             @Override
             public void onItemClick(Long barcode) {
-
                 Intent intent = new Intent(ProductsList.this, itemDetails.class);
-                intent.putExtra("barecode", String.valueOf(barcode)); // Convert Long to String
+                intent.putExtra("barcode", String.valueOf(barcode));
                 startActivity(intent);
             }
         });
-        recyclerView.setAdapter(customAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ProductsList.this));
-        storeDataItem("");
 
+        customAdapter.setItemLongClickListener(new AdapterItem.ItemLongClickListener() {
+            @Override
+            public void onItemLongClick(Long barcode) {
+
+            }
+        });
+    }
+
+    private void listFiltered(String text) {
+        List<item> filteredList = new ArrayList<>();
+        List<item> itemList = myDB.readAllData();
+        for (item item : itemList) {
+            if (item.getArticleName().toLowerCase().contains(text.toLowerCase())) {
+                filteredList.add(item);
+            }
+        }
+        if (filteredList.isEmpty()) {
+            Toast.makeText(this, "No products", Toast.LENGTH_SHORT).show();
+        } else {
+            customAdapter.filtredList(filteredList);
+        }
     }
 
     private void startBarcodeScanning() {
         IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setPrompt("Scan a barcode");  // Optional: Set a prompt message
+        integrator.setPrompt("Scan a barcode");
         integrator.setOrientationLocked(false);
-        integrator.setCaptureActivity(Capture.class);// Optional: Lock the orientation
+        integrator.setCaptureActivity(Capture.class);
         integrator.initiateScan();
     }
 
@@ -125,29 +124,10 @@ public class ProductsList extends AppCompatActivity {
             String scannedBarcode = result.getContents();
             Long barcodeToSearch = Long.parseLong(scannedBarcode);
             Intent intent = new Intent(ProductsList.this, itemDetails.class);
-            intent.putExtra("barecode", String.valueOf(barcodeToSearch)); // Convert Long to String
+            intent.putExtra("barcode", String.valueOf(barcodeToSearch));
             startActivity(intent);
         } else {
             Toast.makeText(this, "Scan failed", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    void storeDataItem(String item) {
-
-        Cursor cursor = myDB.readDataItem(item);
-        if (cursor.getCount() == 0) {
-            Toast.makeText(this, "Item not found", Toast.LENGTH_SHORT).show();
-        } else {
-
-            while (cursor.moveToNext()) {
-                this.barcode.add(cursor.getLong(0));
-                name.add(cursor.getString(1));
-                seller.add(cursor.getString(2));
-                date.add(cursor.getString(3));
-                quantity.add(cursor.getInt(6));
-                buyingPrice.add(cursor.getInt(4));
-                sellingPrice.add(cursor.getInt(5));
-            }
         }
     }
 }

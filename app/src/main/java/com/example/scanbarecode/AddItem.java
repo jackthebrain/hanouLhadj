@@ -60,14 +60,15 @@ public class AddItem extends AppCompatActivity {
             public void onClick(View view) {
                 bareCode = Long.parseLong(String.valueOf(BareCode.getText()));
                 dataBase myDB = new dataBase(AddItem.this);
-                myDB.addItem(AddItem.this,bareCode,
+                item newItem = new item(bareCode,
                         ItemName.getText().toString().trim(),
                         ItemSeller.getText().toString().trim(),
                         formattedDate,
-                        Integer.valueOf(Quantity.getText().toString().trim()),
                         Integer.valueOf(BuyingPrice.getText().toString().trim()),
-                        Integer.valueOf(SellingPrice.getText().toString().trim())
+                        Integer.valueOf(SellingPrice.getText().toString().trim()),
+                        Integer.valueOf(Quantity.getText().toString().trim())
                 );
+                myDB.addItem(AddItem.this,newItem);
             }
         });
     }
@@ -84,8 +85,7 @@ public class AddItem extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null && result.getContents() != null) {
-            BareCode.setText(result.getContents()); // Save the scanned barcode value
-            // Do something with the scanned barcode
+            BareCode.setText(result.getContents());
         } else {
             Toast.makeText(this, "failed", Toast.LENGTH_SHORT).show();
         }

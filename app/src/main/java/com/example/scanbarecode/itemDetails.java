@@ -1,28 +1,23 @@
 package com.example.scanbarecode;
 
-import static android.content.ContentValues.TAG;
-
-
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class itemDetails extends AppCompatActivity {
 
     private TextView quantity, Barcode, itemSeller, buyingPrice, sellingPrice, date, itemName;
-    private dataBase myDB;
+    private Button deleteImage;
+    dataBase myDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,17 +31,39 @@ public class itemDetails extends AppCompatActivity {
         itemName = findViewById(R.id.itemName);
         date = findViewById(R.id.date);
         buyingPrice = findViewById(R.id.buyingPrice);
+        deleteImage = findViewById(R.id.deleteImage);
+        
 
         Intent intent = getIntent();
-        String barcodeString = intent.getStringExtra("barecode");
+        String barcodeString = intent.getStringExtra("barcode");
         long barcodeValue = Long.parseLong(barcodeString);
         storeDataInArrays(barcodeValue);
+
+        deleteImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(itemDetails.this);
+                builder.setTitle("suppression article")
+                        .setMessage("vous êtes sûr ?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                myDB.deleteItem(barcodeString);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        });
 
     }
 
     private void storeDataInArrays(long barcode) {
-        myDB = new dataBase(this);
-
+        dataBase myDB = new dataBase(this);
         Cursor cursor = myDB.readData(barcode);
         if (cursor.getCount() == 0) {
             Toast.makeText(this, "Not found", Toast.LENGTH_SHORT).show();

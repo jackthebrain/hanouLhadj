@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 class dataBase extends SQLiteOpenHelper {
 
     private Context context;
@@ -49,17 +52,17 @@ class dataBase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    void addItem(Activity activity, long barcode, String name, String seller, String date, int quantity, int buyingPrice, int sellingPrice) {
+    void addItem(Activity activity, item item) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put(COLUMN_BARCODE, barcode);
-        cv.put(COLUMN_QUANTITY, quantity);
-        cv.put(COLUMN_NAME, name);
-        cv.put(COLUMN_SELLER, seller);
-        cv.put(COLUMN_DATE, date);
-        cv.put(COLUMN_BUYINGPRICE, buyingPrice);
-        cv.put(COLUMN_SELLINGPRICE, sellingPrice);
+        cv.put(COLUMN_BARCODE, item.getBarecode());
+        cv.put(COLUMN_QUANTITY, item.getQuantity());
+        cv.put(COLUMN_NAME, item.getArticleName());
+        cv.put(COLUMN_SELLER, item.getSeller());
+        cv.put(COLUMN_DATE, item.getDate());
+        cv.put(COLUMN_BUYINGPRICE, item.getBuyingprice());
+        cv.put(COLUMN_SELLINGPRICE, item.getSellingprice());
 
         try {
             long result = db.insertOrThrow(TABLE_NAME, null, cv);
@@ -73,15 +76,32 @@ class dataBase extends SQLiteOpenHelper {
         }
     }
 
-    Cursor readAllData(){
+    List<item> readAllData() {
         String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
-        if(db != null){
+        if (db != null) {
             cursor = db.rawQuery(query, null);
         }
-        return cursor;
+        List<item> itemList = new ArrayList<>();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                long barcode = cursor.getLong(0);
+                String articleName = cursor.getString(1);
+                String seller = cursor.getString(2);
+                String date = cursor.getString(3);
+                int quantity = cursor.getInt(5);
+                int buyingPrice = cursor.getInt(4);
+                int sellingPrice = cursor.getInt(6);
+
+                item item = new item(barcode, articleName, seller, date, buyingPrice, sellingPrice, quantity);
+                itemList.add(item);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return itemList;
     }
     Cursor readData(Long barCode) {
         String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_BARCODE + " = " + barCode;
@@ -118,20 +138,19 @@ class dataBase extends SQLiteOpenHelper {
 
     }*/
 
-    void deleteOneRow(long barcode) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        long result = db.delete(TABLE_NAME, COLUMN_BARCODE + "=?", new String[]{String.valueOf(barcode)});
-        if (result == -1) {
-            Toast.makeText(context, "Failed to Delete.", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "Successfully Deleted.", Toast.LENGTH_SHORT).show();
-        }
-        db.close();
-    }
+    public void deleteItem(String barcode) {
+        SQLiteDatabase db = getWritableDatabase();
+        String whereClause = COLUMN_BARCODE + " = ?";
+        String[] whereArgs = { String.valueOf(barcode) };
 
-   /* void deleteAllData(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_NAME);
-    }*/
+        int rowsDeleted = db.delete(TABLE_NAME, whereClause, whereArgs);
+        db.close();
+
+        if (rowsDeleted > 0) {
+            Toast.makeText(context, "Item deleted successfully", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Failed to delete item", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 }
