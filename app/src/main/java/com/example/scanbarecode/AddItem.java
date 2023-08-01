@@ -58,17 +58,29 @@ public class AddItem extends AppCompatActivity {
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bareCode = Long.parseLong(String.valueOf(BareCode.getText()));
+                String bareCodeString = BareCode.getText().toString().trim();
+                String itemName = ItemName.getText().toString().trim();
+                String itemSeller = ItemSeller.getText().toString().trim();
+                String buyingPriceString = BuyingPrice.getText().toString().trim();
+                String sellingPriceString = SellingPrice.getText().toString().trim();
+                String quantityString = Quantity.getText().toString().trim();
+
+                if (bareCodeString.isEmpty() || itemName.isEmpty() || itemSeller.isEmpty() ||
+                        buyingPriceString.isEmpty() || sellingPriceString.isEmpty() || quantityString.isEmpty()) {
+                    // At least one field is empty, show an error message or a Toast
+                    Toast.makeText(AddItem.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    return; // Don't proceed further
+                }
+
+                // If all fields are filled, continue with adding the item to the database
+                long bareCode = Long.parseLong(bareCodeString);
+                int buyingPrice = Integer.parseInt(buyingPriceString);
+                int sellingPrice = Integer.parseInt(sellingPriceString);
+                int quantity = Integer.parseInt(quantityString);
+
                 dataBase myDB = new dataBase(AddItem.this);
-                item newItem = new item(bareCode,
-                        ItemName.getText().toString().trim(),
-                        ItemSeller.getText().toString().trim(),
-                        formattedDate,
-                        Integer.valueOf(BuyingPrice.getText().toString().trim()),
-                        Integer.valueOf(SellingPrice.getText().toString().trim()),
-                        Integer.valueOf(Quantity.getText().toString().trim())
-                );
-                myDB.addItem(AddItem.this,newItem);
+                item newItem = new item(bareCode, itemName, itemSeller, formattedDate, buyingPrice, sellingPrice, quantity);
+                myDB.addItem(AddItem.this, newItem);
             }
         });
     }

@@ -138,10 +138,10 @@ class dataBase extends SQLiteOpenHelper {
 
     }*/
 
-    public void deleteItem(String barcode) {
-        SQLiteDatabase db = getWritableDatabase();
+    public void deleteItem(long barcode) {
+        SQLiteDatabase db = this.getWritableDatabase();
         String whereClause = COLUMN_BARCODE + " = ?";
-        String[] whereArgs = { String.valueOf(barcode) };
+        String[] whereArgs = {String.valueOf(barcode)};
 
         int rowsDeleted = db.delete(TABLE_NAME, whereClause, whereArgs);
         db.close();

@@ -25,7 +25,7 @@ public class itemDetails extends AppCompatActivity {
         setContentView(R.layout.activity_item_details);
 
         quantity = findViewById(R.id.quantity);
-        Barcode = findViewById(R.id.Barecode); // Updated ID
+        Barcode = findViewById(R.id.Barecode);
         sellingPrice = findViewById(R.id.sellingPrice);
         itemSeller = findViewById(R.id.itemSeller);
         itemName = findViewById(R.id.itemName);
@@ -47,7 +47,8 @@ public class itemDetails extends AppCompatActivity {
                         .setMessage("vous êtes sûr ?")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                myDB.deleteItem(barcodeString);
+                                myDB = new dataBase(itemDetails.this);
+                                myDB.deleteItem(barcodeValue);
                                 finish();
                             }
                         })

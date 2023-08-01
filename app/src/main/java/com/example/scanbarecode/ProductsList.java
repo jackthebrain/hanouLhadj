@@ -103,6 +103,8 @@ public class ProductsList extends AppCompatActivity {
         }
         if (filteredList.isEmpty()) {
             Toast.makeText(this, "No products", Toast.LENGTH_SHORT).show();
+            filteredList.clear();
+            customAdapter.filtredList(filteredList);
         } else {
             customAdapter.filtredList(filteredList);
         }

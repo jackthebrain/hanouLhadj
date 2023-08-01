@@ -184,10 +184,10 @@
 
     <TextView
         android:id="@+id/Barecode"
-        android:layout_width="122dp"
-        android:layout_height="18dp"
-        android:layout_marginTop="68dp"
-        android:layout_marginEnd="36dp"
+        android:layout_width="146dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="48dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textColor="@color/teal_700"
@@ -195,7 +195,7 @@
         app:layout_constraintBottom_toTopOf="@+id/itemName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.794" />
+        app:layout_constraintVertical_bias="0.982" />
 
     <TextView
         android:id="@+id/textView5"
