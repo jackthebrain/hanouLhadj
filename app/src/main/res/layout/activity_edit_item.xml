@@ -6,4 +6,113 @@
     android:layout_height="match_parent"
     tools:context=".editItem">
 
+    <EditText
+        android:id="@+id/ItemName"
+        android:layout_width="317dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="24dp"
+        android:ems="10"
+        android:hint="Item Name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/ItemSeller"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/addItem"
+        android:layout_width="260dp"
+        android:layout_height="67dp"
+        android:layout_marginBottom="68dp"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/SellingPrice"
+        android:layout_width="317dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="20dp"
+        android:ems="10"
+        android:hint="Selling Price"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/Quantity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/BuyingPrice"
+        android:layout_width="317dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="20dp"
+        android:ems="10"
+        android:hint="Buying Price"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/SellingPrice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/Quantity"
+        android:layout_width="317dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="52dp"
+        android:ems="10"
+        android:hint="Quantity"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/addItem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/scanCode"
+        android:layout_width="212dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="44dp"
+        android:text="Scan Barcode"
+        app:layout_constraintBottom_toTopOf="@+id/barecode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.222" />
+
+    <EditText
+        android:id="@+id/ItemSeller"
+        android:layout_width="317dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:ems="10"
+        android:hint="Item Seller"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/BuyingPrice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/barecode"
+        android:layout_width="315dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Code Bare"
+        android:textAlignment="center"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/Date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/Date"
+        android:layout_width="317dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="Date"
+        android:inputType="date"
+        app:layout_constraintBottom_toTopOf="@+id/ItemName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

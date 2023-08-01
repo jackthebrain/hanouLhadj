@@ -112,15 +112,6 @@ class dataBase extends SQLiteOpenHelper {
         }
         return cursor;
     }
-    Cursor readDataItem(String item) {
-        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_NAME + " LIKE '" + item + "%'";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = null;
-        if (db != null) {
-            cursor = db.rawQuery(query, null);
-        }
-        return cursor;
-    }
 
     /*void updateData(String row_id, String title, String author, String pages){
         SQLiteDatabase db = this.getWritableDatabase();

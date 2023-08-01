@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class itemDetails extends AppCompatActivity {
 
     private TextView quantity, Barcode, itemSeller, buyingPrice, sellingPrice, date, itemName;
-    private Button deleteImage;
+    private Button deleteImage,editButton;
     dataBase myDB;
 
     @Override
@@ -32,6 +32,7 @@ public class itemDetails extends AppCompatActivity {
         date = findViewById(R.id.date);
         buyingPrice = findViewById(R.id.buyingPrice);
         deleteImage = findViewById(R.id.deleteImage);
+        editButton = findViewById(R.id.editButton);
         
 
         Intent intent = getIntent();
@@ -58,6 +59,17 @@ public class itemDetails extends AppCompatActivity {
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+            }
+        });
+
+
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(itemDetails.this,editItem.class);
+                startActivity(intent);
+
             }
         });
 
