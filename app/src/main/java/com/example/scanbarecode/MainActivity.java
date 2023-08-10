@@ -7,7 +7,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.journeyapps.barcodescanner.ScanContract;
@@ -15,17 +17,20 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 public class MainActivity extends AppCompatActivity {
 
-    public Button scan,add;
+    public ImageView productList,addProduct;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
 
-        scan = findViewById(R.id.scan);
-        add = findViewById(R.id.add);
+        productList = findViewById(R.id.productList);
+        addProduct = findViewById(R.id.add);
 
-        scan.setOnClickListener(new View.OnClickListener() {
+        productList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent= new Intent(MainActivity.this,ProductsList.class);
@@ -34,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        add.setOnClickListener(new View.OnClickListener() {
+        addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent= new Intent(MainActivity.this,AddItem.class);

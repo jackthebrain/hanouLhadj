@@ -56,7 +56,6 @@ public class AdapterItem extends RecyclerView.Adapter<AdapterItem.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         item currentItem = itemList.get(position);
-
         holder.itemNameView.setText(currentItem.getArticleName());
         holder.sellingPriceView.setText(String.valueOf(currentItem.getSellingprice()));
         holder.quantityView.setText(String.valueOf(currentItem.getQuantity()));

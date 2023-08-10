@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/addItem"
+        android:id="@+id/saveEdit"
         android:layout_width="260dp"
         android:layout_height="67dp"
         android:layout_marginBottom="68dp"
@@ -57,26 +57,27 @@
         android:id="@+id/Quantity"
         android:layout_width="317dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="52dp"
+        android:layout_marginBottom="28dp"
         android:ems="10"
         android:hint="Quantity"
         android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/addItem"
+        app:layout_constraintBottom_toTopOf="@+id/saveEdit"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/scanCode"
-        android:layout_width="212dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="44dp"
-        android:text="Scan Barcode"
+        android:layout_width="116dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="48dp"
+        android:text="edit Barcode"
         app:layout_constraintBottom_toTopOf="@+id/barecode"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintEnd_toStartOf="@+id/editdate"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.222" />
+        app:layout_constraintVertical_bias="0.728" />
 
     <EditText
         android:id="@+id/ItemSeller"
@@ -103,16 +104,29 @@
         app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
+    <TextView
         android:id="@+id/Date"
-        android:layout_width="317dp"
-        android:layout_height="55dp"
+        android:layout_width="315dp"
+        android:layout_height="35dp"
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="Date"
-        android:inputType="date"
+        android:textAlignment="center"
+        android:textSize="16dp"
         app:layout_constraintBottom_toTopOf="@+id/ItemName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/editdate"
+        android:layout_width="116dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="24dp"
+        android:text="edit date"
+        app:layout_constraintBottom_toTopOf="@+id/barecode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.963" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

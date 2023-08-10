@@ -17,6 +17,7 @@ public class itemDetails extends AppCompatActivity {
 
     private TextView quantity, Barcode, itemSeller, buyingPrice, sellingPrice, date, itemName;
     private Button deleteImage,editButton;
+    ImageView backArrow;
     dataBase myDB;
 
     @Override
@@ -33,6 +34,7 @@ public class itemDetails extends AppCompatActivity {
         buyingPrice = findViewById(R.id.buyingPrice);
         deleteImage = findViewById(R.id.deleteImage);
         editButton = findViewById(R.id.editButton);
+        backArrow = findViewById(R.id.backArrow);
         
 
         Intent intent = getIntent();
@@ -67,7 +69,18 @@ public class itemDetails extends AppCompatActivity {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String barcode = String.valueOf(Barcode.getText());
+                Toast.makeText(itemDetails.this, barcode, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(itemDetails.this,editItem.class);
+                intent.putExtra("barcode", String.valueOf(barcode));
+                startActivity(intent);
+            }
+        });
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(itemDetails.this,ProductsList.class);
+                finish();
                 startActivity(intent);
 
             }

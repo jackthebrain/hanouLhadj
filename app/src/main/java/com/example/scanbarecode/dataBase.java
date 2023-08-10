@@ -113,21 +113,25 @@ class dataBase extends SQLiteOpenHelper {
         return cursor;
     }
 
-    /*void updateData(String row_id, String title, String author, String pages){
+    void updateData(long barecode,long UpdatedBarecode, String articleName, String seller, String date, int buyingprice, int sellingprice, int quantity) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_TITLE, title);
-        cv.put(COLUMN_AUTHOR, author);
-        cv.put(COLUMN_PAGES, pages);
+        cv.put(COLUMN_BARCODE, UpdatedBarecode);
+        cv.put(COLUMN_QUANTITY, quantity);
+        cv.put(COLUMN_NAME, articleName);
+        cv.put(COLUMN_SELLER, seller);
+        cv.put(COLUMN_DATE, date);
+        cv.put(COLUMN_BUYINGPRICE, buyingprice);
+        cv.put(COLUMN_SELLINGPRICE, sellingprice);
 
-        long result = db.update(TABLE_NAME, cv, "_id=?", new String[]{row_id});
-        if(result == -1){
+        String strBarecode = String.valueOf(barecode);
+        long result = db.update(TABLE_NAME, cv, COLUMN_BARCODE + "=?", new String[]{strBarecode});
+        if (result == -1) {
             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             Toast.makeText(context, "Updated Successfully!", Toast.LENGTH_SHORT).show();
         }
-
-    }*/
+    }
 
     public void deleteItem(long barcode) {
         SQLiteDatabase db = this.getWritableDatabase();

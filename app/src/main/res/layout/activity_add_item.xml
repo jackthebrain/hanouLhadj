@@ -19,15 +19,17 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/addItem"
+        android:id="@+id/saveEdit"
         android:layout_width="260dp"
         android:layout_height="67dp"
         android:layout_marginBottom="68dp"
-        android:text="Add Item"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:backgroundTint="#8AAFF3"
+    android:text="Add Item"
+    android:textSize="20dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.496"
+    app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/SellingPrice"
@@ -61,22 +63,9 @@
         android:ems="10"
         android:hint="Quantity"
         android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/addItem"
+        app:layout_constraintBottom_toTopOf="@+id/saveEdit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/scanCode"
-        android:layout_width="212dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="44dp"
-        android:text="Scan Barcode"
-        app:layout_constraintBottom_toTopOf="@+id/barecode"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.222" />
 
     <EditText
         android:id="@+id/ItemSeller"
@@ -92,15 +81,28 @@
 
     <TextView
         android:id="@+id/barecode"
-        android:layout_width="315dp"
-        android:layout_height="35dp"
-        android:layout_marginBottom="20dp"
+        android:layout_width="240dp"
+        android:layout_height="42dp"
+        android:layout_marginBottom="16dp"
         android:hint="Code Bare"
         android:textAlignment="center"
         android:textSize="16dp"
         app:layout_constraintBottom_toTopOf="@+id/ItemName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/scanBare"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/scanBare"
+        android:layout_width="61dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="56dp"
+        app:layout_constraintBottom_toTopOf="@+id/ItemName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.926"
+        app:srcCompat="@drawable/scan_code" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +23,8 @@ public class AddItem extends AppCompatActivity {
 
     private EditText ItemName, ItemSeller, BuyingPrice, SellingPrice, Quantity;
     private TextView BareCode;
-    private Button addItem, scanCode;
+    private Button addItem;
+    private ImageView scanCode;
     private long bareCode;
 
     @SuppressLint("MissingInflatedId")
@@ -37,8 +39,8 @@ public class AddItem extends AppCompatActivity {
         BuyingPrice = findViewById(R.id.BuyingPrice);
         SellingPrice = findViewById(R.id.SellingPrice);
         Quantity = findViewById(R.id.Quantity);
-        addItem = findViewById(R.id.addItem);
-        scanCode = findViewById(R.id.scanCode);
+        addItem = findViewById(R.id.saveEdit);
+        scanCode = findViewById(R.id.scanBare);
 
         // Getting current date
         Date currentDate = new Date();
@@ -88,7 +90,8 @@ public class AddItem extends AppCompatActivity {
     private void startBarcodeScanning() {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setPrompt("Scan a barcode");  // Optional: Set a prompt message
-        integrator.setOrientationLocked(true);  // Optional: Lock the orientation
+        integrator.setOrientationLocked(true);
+        integrator.setCaptureActivity(Capture.class);// Optional: Lock the orientation
         integrator.initiateScan();
     }
 
